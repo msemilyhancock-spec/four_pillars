@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Bāzì (八字)">
+    <title>Four Pillars of Destiny 🔮 Bāzì (八字)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setup-section {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .date-picker-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .date-picker-group input {
+            flex: 1;
+        }
+
+        .day-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .day-summary h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .summary-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .summary-item strong {
+            display: block;
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .day-analysis {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .day-analysis strong {
+            color: #667eea;
+        }
+
+        .hour-block {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .hour-block.peak {
+            border-left-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .hour-block.challenging {
+            border-left-color: #ff9800;
+            background: #fff8f1;
+        }
+
+        .hour-block.neutral {
+            border-left-color: #2196F3;
+            background: #f0f7ff;
+        }
+
+        .hour-time {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .hour-block.peak .hour-time {
+            color: #4caf50;
+        }
+
+        .hour-block.challenging .hour-time {
+            color: #ff9800;
+        }
+
+        .hour-block.neutral .hour-time {
+            color: #2196F3;
+        }
+
+        .hour-details {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .hour-stem-branch {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .ten-god {
+            display: inline-block;
+            background: #e8eaf6;
+            color: #3f51b5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-right: 4px;
+            font-weight: 500;
+        }
+
+        .quality-indicator {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .quality-peak {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .quality-challenging {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+
+        .quality-neutral {
+            background: #bbdefb;
+            color: #1565c0;
+        }
+
+        .element-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-right: 4px;
+            margin-bottom: 3px;
+        }
+
+        .element-fire {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .element-wood {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .element-water {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .element-earth {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .element-metal {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
+        .toggle-btn {
+            background: #e0e0e0;
+            color: #333;
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #388e3c;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .settings-toggle {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .settings-toggle button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            width: auto;
+        }
+
+        .chart-info {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .chart-info strong {
+            color: #667eea;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Four Pillars of Destiny 🔮 Bāzì (八字)</h1>
+            <p>Your Daily Energy Guide</p>
+        </div>
+
+        <div class="card">
+            <div class="settings-toggle">
+                <button class="btn-primary" onclick="toggleSetup()">⚙️ Setup Chart</button>
+            </div>
+
+            <div id="setupSection" class="setup-section hidden">
+                <div class="section-title">📋 Birth Chart Setup</div>
+                
+                <div class="form-group">
+                    <label>Birth Date</label>
+                    <input type="date" id="birthDate" placeholder="YYYY-MM-DD">
+                </div>
+
+                <div class="form-group">
+                    <label>Birth Time</label>
+                    <input type="time" id="birthTime" placeholder="HH:MM">
+                </div>
+
+                <div class="form-group">
+                    <label>Day Master (元)</label>
+                    <select id="dayMaster">
+                        <option value="">Select Day Master...</option>
+                        <option value="Yang Metal">Yang Metal (陽金)</option>
+                        <option value="Yin Metal">Yin Metal (陰金)</option>
+                        <option value="Yang Water">Yang Water (陽水)</option>
+                        <option value="Yin Water">Yin Water (陰水)</option>
+                        <option value="Yang Wood">Yang Wood (陽木)</option>
+                        <option value="Yin Wood">Yin Wood (陰木)</option>
+                        <option value="Yang Fire">Yang Fire (陽火)</option>
+                        <option value="Yin Fire">Yin Fire (陰火)</option>
+                        <option value="Yang Earth">Yang Earth (陽土)</option>
+                        <option value="Yin Earth">Yin Earth (陰土)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Chart Strength</label>
+                    <select id="chartStrength">
+                        <option value="">Select...</option>
+                        <option value="Strong">Strong</option>
+                        <option value="Weak">Weak</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Lucky Elements (select all)</label>
+                    <div>
+                        <label style="display: flex; gap: 8px; margin-bottom: 8px; font-weight: normal;">
+                            <input type="checkbox" class="lucky-element" value="Fire"> 🔥 Fire
+                        </label>
+                        <label style="display: flex; gap: 8px; margin-bottom: 8px; font-weight: normal;">
+                            <input type="checkbox" class="lucky-element" value="Wood"> 🌿 Wood
+                        </label>
+                        <label style="display: flex; gap: 8px; margin-bottom: 8px; font-weight: normal;">
+                            <input type="checkbox" class="lucky-element" value="Water"> 💧 Water
+                        </label>
+                        <label style="display: flex; gap: 8px; margin-bottom: 8px; font-weight: normal;">
+                            <input type="checkbox" class="lucky-element" value="Earth"> 🏜️ Earth
+                        </label>
+                        <label style="display: flex; gap: 8px; font-weight: normal;">
+                            <input type="checkbox" class="lucky-element" value="Metal"> ⚙️ Metal
+                        </label>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="saveChart()">Save Chart</button>
+                    <button class="btn-secondary" onclick="toggleSetup()">Done</button>
+                </div>
+            </div>
+
+            <div id="chartDisplay" class="hidden">
+                <div class="chart-info" id="chartInfo"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📅 Select Date</div>
+            <div class="date-picker-group">
+                <input type="date" id="forecastDate">
+                <button class="btn-primary" onclick="getForecast()">Get Forecast</button>
+            </div>
+        </div>
+
+        <div id="forecastSection" class="hidden">
+            <div class="card">
+                <div id="daySummary"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">⏰ Hourly Breakdown (5am - 2am)</div>
+                <div id="hoursContainer"></div>
+                <button class="toggle-btn" onclick="toggleExtendedHours()">📖 Show 2am - 5am</button>
+                <div id="extendedHours" class="hidden" style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e0e0e0;">
+                    <div id="extendedHoursContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // ==================== DATA TABLES ====================
+        
+        const STEMS = {
+            0: { char: '甲', name: 'Yang Wood', element: 'Wood', yin: false },
+            1: { char: '乙', name: 'Yin Wood', element: 'Wood', yin: true },
+            2: { char: '丙', name: 'Yang Fire', element: 'Fire', yin: false },
+            3: { char: '丁', name: 'Yin Fire', element: 'Fire', yin: true },
+            4: { char: '戊', name: 'Yang Earth', element: 'Earth', yin: false },
+            5: { char: '己', name: 'Yin Earth', element: 'Earth', yin: true },
+            6: { char: '庚', name: 'Yang Metal', element: 'Metal', yin: false },
+            7: { char: '辛', name: 'Yin Metal', element: 'Metal', yin: true },
+            8: { char: '壬', name: 'Yang Water', element: 'Water', yin: false },
+            9: { char: '癸', name: 'Yin Water', element: 'Water', yin: true }
+        };
+
+        const BRANCHES = {
+            0: { char: '子', name: 'Rat', element: 'Water', hour: '11pm-1am', animal: '🐭' },
+            1: { char: '丑', name: 'Ox', element: 'Earth', hour: '1am-3am', animal: '🐂' },
+            2: { char: '寅', name: 'Tiger', element: 'Wood', hour: '3am-5am', animal: '🐯' },
+            3: { char: '卯', name: 'Rabbit', element: 'Wood', hour: '5am-7am', animal: '🐰' },
+            4: { char: '辰', name: 'Dragon', element: 'Earth', hour: '7am-9am', animal: '🐉' },
+            5: { char: '巳', name: 'Snake', element: 'Fire', hour: '9am-11am', animal: '🐍' },
+            6: { char: '午', name: 'Horse', element: 'Fire', hour: '11am-1pm', animal: '🐴' },
+            7: { char: '未', name: 'Sheep', element: 'Earth', hour: '1pm-3pm', animal: '🐑' },
+            8: { char: '申', name: 'Monkey', element: 'Metal', hour: '3pm-5pm', animal: '🐵' },
+            9: { char: '酉', name: 'Rooster', element: 'Metal', hour: '5pm-7pm', animal: '🐓' },
+            10: { char: '戌', name: 'Dog', element: 'Earth', hour: '7pm-9pm', animal: '🐕' },
+            11: { char: '亥', name: 'Pig', element: 'Water', hour: '9pm-11pm', animal: '🐷' }
+        };
+
+        const DEFAULT_CHART = {
+            birthDate: '1988-12-21',
+            birthTime: '08:25',
+            dayMaster: 'Yang Metal',
+            chartStrength: 'Strong',
+            luckyElements: ['Fire', 'Wood']
+        };
+
+        document.getElementById('forecastDate').valueAsDate = new Date();
+        loadChart();
+
+        // ==================== CORE FUNCTIONS ====================
+
+        function toggleSetup() {
+            const setupSection = document.getElementById('setupSection');
+            setupSection.classList.toggle('hidden');
+        }
+
+        function loadChart() {
+            let chart = JSON.parse(localStorage.getItem('birthChart'));
+            
+            if (!chart) {
+                chart = DEFAULT_CHART;
+                localStorage.setItem('birthChart', JSON.stringify(chart));
+            }
+            
+            document.getElementById('birthDate').value = chart.birthDate;
+            document.getElementById('birthTime').value = chart.birthTime;
+            document.getElementById('dayMaster').value = chart.dayMaster;
+            document.getElementById('chartStrength').value = chart.chartStrength;
+            
+            document.querySelectorAll('.lucky-element').forEach(el => {
+                el.checked = chart.luckyElements && chart.luckyElements.includes(el.value);
+            });
+
+            displayChartInfo(chart);
+        }
+
+        function saveChart() {
+            const luckyElements = Array.from(document.querySelectorAll('.lucky-element:checked'))
+                .map(el => el.value);
+
+            const chart = {
+                birthDate: document.getElementById('birthDate').value,
+                birthTime: document.getElementById('birthTime').value,
+                dayMaster: document.getElementById('dayMaster').value,
+                chartStrength: document.getElementById('chartStrength').value,
+                luckyElements: luckyElements
+            };
+
+            // Validate all required fields
+            if (!chart.birthDate || !chart.dayMaster || !chart.chartStrength) {
+                showMessage('Please fill all required fields', 'error');
+                return;
+            }
+
+            // Validate at least one lucky element is selected
+            if (!chart.luckyElements || chart.luckyElements.length === 0) {
+                showMessage('Please select at least one lucky element', 'error');
+                return;
+            }
+
+            localStorage.setItem('birthChart', JSON.stringify(chart));
+            showMessage('Birth chart saved!', 'success');
+            displayChartInfo(chart);
+            setTimeout(() => toggleSetup(), 1000);
+        }
+
+        function displayChartInfo(chart) {
+            const chartDisplay = document.getElementById('chartDisplay');
+            const chartInfo = document.getElementById('chartInfo');
+            
+            if (chart.birthDate) {
+                const luckyElementsText = (chart.luckyElements && chart.luckyElements.length > 0) 
+                    ? chart.luckyElements.join(', ') 
+                    : 'None selected';
+                    
+                chartInfo.innerHTML = `
+                    <strong>📊 Your Chart</strong><br>
+                    Born: ${chart.birthDate} at ${chart.birthTime}<br>
+                    Day Master: ${chart.dayMaster}<br>
+                    Strength: ${chart.chartStrength}<br>
+                    Lucky Elements: ${luckyElementsText}
+                `;
+                chartDisplay.classList.remove('hidden');
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="${type}">${text}</div>`;
+            setTimeout(() => messageDiv.innerHTML = '', 3000);
+        }
+
+        async function getForecast() {
+            const chart = JSON.parse(localStorage.getItem('birthChart')) || DEFAULT_CHART;
+            
+            const forecastDate = document.getElementById('forecastDate').value;
+            if (!forecastDate) {
+                showMessage('Please select a date', 'error');
+                return;
+            }
+
+            showMessage('Generating forecast...', 'loading');
+            
+            try {
+                const stemBranch = await getDayStemBranch(forecastDate);
+                
+                if (!stemBranch) {
+                    showMessage('Error: Unable to calculate date. Try another date.', 'error');
+                    return;
+                }
+
+                generateForecast(forecastDate, stemBranch, chart);
+                document.getElementById('forecastSection').classList.remove('hidden');
+                showMessage('✓ Forecast ready!', 'success');
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function getDayStemBranch(dateStr) {
+            try {
+                const [year, month, day] = dateStr.split('-').map(Number);
+                
+                // Primary API - istellar
+                try {
+                    const response = await fetch(
+                        `https://api.istellar.com.cn/v1/calendar?date=${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`,
+                        { 
+                            mode: 'cors',
+                            credentials: 'omit',
+                            headers: { 'Accept': 'application/json' }
+                        }
+                    );
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.celestialStem && data.celestialBranch) {
+                            console.log('✓ Using istellar API');
+                            return data.celestialStem + data.celestialBranch;
+                        }
+                    }
+                } catch (e) {
+                    console.log('istellar API unavailable, trying calculation...');
+                }
+                
+                // Fallback: Use mathematical calculation
+                console.log('Using mathematical calculation');
+                return getDefaultStemBranch(dateStr);
+                
+            } catch (error) {
+                console.error('Error in getDayStemBranch:', error);
+                // Last resort: still use calculation
+                return getDefaultStemBranch(dateStr);
+            }
+        }
+
+        function getDefaultStemBranch(dateStr) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            
+            // Reference: Feb 19, 2026 = Yang Metal Rat (庚子)
+            // Yang Metal = stem index 6 (庚), Rat = branch index 0 (子)
+            // This is day 37 in the 60-day cycle
+            const refDate = new Date(2026, 1, 19); // Feb 19, 2026
+            const refStemIndex = 6; // Yang Metal (庚)
+            const refBranchIndex = 0; // Rat (子)
+            
+            const currentDate = new Date(year, month - 1, day);
+            const diffDays = Math.floor((currentDate - refDate) / (1000 * 60 * 60 * 24));
+            
+            // Calculate position in 60-day cycle (handle negative modulo)
+            const stemIndex = ((refStemIndex + diffDays) % 10 + 10) % 10;
+            const branchIndex = ((refBranchIndex + diffDays) % 12 + 12) % 12;
+            
+            const stem = Object.values(STEMS)[stemIndex];
+            const branch = Object.values(BRANCHES)[branchIndex];
+            
+            return stem.char + branch.char;
+        }
+
+        function parseStemBranch(stemBranchStr) {
+            if (!stemBranchStr || stemBranchStr.length < 2) return null;
+            
+            const stemChar = stemBranchStr.charAt(0);
+            const branchChar = stemBranchStr.charAt(1);
+            
+            const stemIndex = Object.values(STEMS).findIndex(s => s.char === stemChar);
+            const branchIndex = Object.values(BRANCHES).findIndex(b => b.char === branchChar);
+            
+            if (stemIndex === -1 || branchIndex === -1) return null;
+            
+            return {
+                stem: STEMS[stemIndex],
+                stemIndex: stemIndex,
+                branch: BRANCHES[branchIndex],
+                branchIndex: branchIndex
+            };
+        }
+
+        function getHourStemBranch(branchIndex) {
+            // Hour stem cycles every 10 hours, starting from Rat (子) with Yang Metal (甲)
+            const hourStemIndex = (branchIndex * 2) % 10;
+            return {
+                stem: STEMS[hourStemIndex],
+                stemIndex: hourStemIndex
+            };
+        }
+
+        function getTenGodRelationship(dayMasterElement, hourElement) {
+            // Simplified 10-God relationship based on element interaction
+            const relationships = {
+                'Fire-Fire': 'Same Self',
+                'Fire-Wood': 'Produces Wealth',
+                'Fire-Earth': 'Produces Output',
+                'Fire-Metal': 'Controls Officer',
+                'Fire-Water': 'Competes',
+                'Wood-Fire': 'Controlled By Parent',
+                'Wood-Wood': 'Same Self',
+                'Wood-Earth': 'Produces Output',
+                'Wood-Metal': 'Produces Wealth',
+                'Wood-Water': 'Controlled By Resource',
+                'Metal-Fire': 'Controls Officer',
+                'Metal-Wood': 'Competes',
+                'Metal-Earth': 'Controlled By Parent',
+                'Metal-Metal': 'Same Self',
+                'Metal-Water': 'Produces Wealth',
+                'Water-Fire': 'Produces Wealth',
+                'Water-Wood': 'Controlled By Resource',
+                'Water-Earth': 'Produces Output',
+                'Water-Metal': 'Controlled By Parent',
+                'Water-Water': 'Same Self',
+                'Earth-Fire': 'Produces Output',
+                'Earth-Wood': 'Controls Officer',
+                'Earth-Earth': 'Same Self',
+                'Earth-Metal': 'Controlled By Parent',
+                'Earth-Water': 'Competes'
+            };
+            
+            return relationships[`${dayMasterElement}-${hourElement}`] || 'Unknown';
+        }
+
+        function getElementColors(element) {
+            const colors = {
+                'Fire': { wear: 'Red, Purple, Pink, Magenta', avoid: 'Black, Dark Blue', hex: '#d32f2f' },
+                'Wood': { wear: 'Green, Teal, Cyan, Turquoise', avoid: 'White, Gray, Gold', hex: '#388e3c' },
+                'Water': { wear: 'Black, Dark Blue, Navy, Indigo', avoid: 'Red, Orange, Yellow', hex: '#1565c0' },
+                'Earth': { wear: 'Yellow, Beige, Brown, Tan, Orange', avoid: 'Black, Dark Blue, Green', hex: '#e65100' },
+                'Metal': { wear: 'White, Silver, Gray, Metallic, Cream', avoid: 'Red, Green, Purple', hex: '#6a1b9a' }
+            };
+            return colors[element] || colors['Fire'];
+        }
+
+        function getWorkEnvironmentRecommendation(quality, dayElement, luckyElements) {
+            if (luckyElements.includes(dayElement)) {
+                return {
+                    ideal: 'Open, bright environment (coffee shop, park, co-working space)',
+                    reason: 'Your lucky element activates - thrives in dynamic, energetic spaces',
+                    icon: '☀️'
+                };
+            } else if (dayElement === 'Water') {
+                return {
+                    ideal: 'Quiet, focused environment (home office, library, quiet café)',
+                    reason: 'Water energy benefits from calm, introspective spaces',
+                    icon: '🏠'
+                };
+            } else {
+                return {
+                    ideal: 'Balanced environment (can work from home or public space)',
+                    reason: 'Neutral energy - adaptable to different settings',
+                    icon: '⚖️'
+                };
+            }
+        }
+
+        function getIdealExerciseWindow(daySBInfo, chart) {
+            const dayElement = daySBInfo.stem.element;
+            
+            // If today is your lucky element day, recommend peak hours
+            if (chart.luckyElements.includes(dayElement)) {
+                // Fire = Snake (9-11am) and Horse (11am-1pm)
+                // Wood = Tiger (3-5am) and Rabbit (5-7am)
+                if (dayElement === 'Fire') {
+                    return {
+                        window: '🐍 Snake (9-11am) or 🐴 Horse (11am-1pm)',
+                        icon: '⭐',
+                        reason: 'Peak Fire energy day - ideal for intense workouts, HIIT, weights, cardio. Your lucky element fuels maximum power.'
+                    };
+                } else if (dayElement === 'Wood') {
+                    return {
+                        window: '🐯 Tiger (3-5am) or 🐰 Rabbit (5-7am)',
+                        icon: '⭐',
+                        reason: 'Peak Wood energy day - ideal for yoga, stretching, flexibility training. Your lucky element supports flowing movements.'
+                    };
+                }
+            }
+            
+            // If today is Water (challenging for Strong Metal), recommend light exercise
+            if (dayElement === 'Water' && chart.chartStrength === 'Strong') {
+                return {
+                    window: '🐉 Dragon (7-9am) or light stretching anytime',
+                    icon: '⚠️',
+                    reason: 'Challenging Water day - avoid intense workouts. Choose light yoga, stretching, or walking instead.'
+                };
+            }
+            
+            // Neutral days (Earth, Metal, or other combinations)
+            // Recommend steady, moderate exercise
+            return {
+                window: '🐉 Dragon (7-9am) or 🐑 Sheep (1-3pm)',
+                icon: '✓',
+                reason: 'Neutral energy day - good for regular workouts, running, gym routine. Steady, consistent conditions.'
+            };
+        }
+
+        function getTravelGuidance(dayElement, daySBInfo, chart) {
+            if (chart.luckyElements.includes(dayElement)) {
+                return {
+                    status: '✈️ STRONGLY FAVORED',
+                    advice: 'Excellent day for travel, moving, relocations, and exploration. Your lucky element supports expansion and movement.',
+                    color: '#2e7d32',
+                    shouldTravel: true
+                };
+            } else if (dayElement === 'Water' && chart.chartStrength === 'Strong') {
+                return {
+                    status: '⚠️ USE CAUTION',
+                    advice: 'Water energy challenges your Metal. Local travel OK, but avoid long trips or important travel decisions.',
+                    color: '#e65100',
+                    shouldTravel: false
+                };
+            } else {
+                return {
+                    status: '◆ NEUTRAL',
+                    advice: 'Travel is possible but not particularly favored. Good for local trips but save major journeys for peak days.',
+                    color: '#1565c0',
+                    shouldTravel: null
+                };
+            }
+        }
+
+        function getRomanceMeter(daySBInfo, chart) {
+            const dayElement = daySBInfo.stem.element;
+            const dayStemYin = daySBInfo.stem.yin;
+            
+            let rating = 0;
+            let status = '';
+            let color = '';
+            let advice = '';
+            let bestHours = '';
+            
+            // Fire days - Excellent for romance (your lucky element!)
+            if (dayElement === 'Fire' && chart.luckyElements.includes('Fire')) {
+                rating = 9;
+                status = '🔥 EXCELLENT - Fire Romance Energy!';
+                color = '#ff6b6b';
+                advice = 'Peak day for romance! Your natural charisma and magnetism are at maximum. Perfect for new connections, deepening intimacy, or important romantic conversations. Someone may reach out to you today. Say YES to social invitations.';
+                bestHours = '🐍 Snake (9-11am) & 🐴 Horse (11am-1pm) - Peak romantic energy windows';
+            }
+            
+            // Wood days - Very good for romance (your other lucky element)
+            else if (dayElement === 'Wood' && chart.luckyElements.includes('Wood')) {
+                rating = 8;
+                status = '🌿 VERY GOOD - Wood Romance Energy!';
+                color = '#51cf66';
+                advice = 'Excellent day for romance! Your flexibility and warmth attract others. Great for genuine connections, romantic dates, or expressing feelings. Growth in relationships is favored. Be open to interactions.';
+                bestHours = '🐯 Tiger (3-5am) & 🐰 Rabbit (5-7am) - Morning is most auspicious';
+            }
+            
+            // Water days - Challenging for romance (your challenging element)
+            else if (dayElement === 'Water' && chart.chartStrength === 'Strong') {
+                rating = 3;
+                status = '💧 CHALLENGING - Use Caution in Romance';
+                color = '#4dabf7';
+                advice = 'Low romance energy today. Water challenges your Metal chart. Focus on quiet time, self-reflection, and introspection rather than pursuing romance. If someone reaches out, respond thoughtfully rather than reactively. Good day for planning future romantic activities, not executing them.';
+                bestHours = '🐉 Dragon (7-9am) - Only time for light romantic activities';
+            }
+            
+            // Neutral days - Okay for romance
+            else {
+                rating = 5;
+                status = '◆ MODERATE - Neutral Romance Energy';
+                color = '#a78bfa';
+                advice = 'Balanced day for romance. No special boost, but nothing preventing it. Be responsive if someone reaches out. Regular dating/relationship activities are fine. Good for casual connection, but save major romantic moves for your lucky Fire/Wood element days.';
+                bestHours = '🐉 Dragon (7-9am) - Steady energy for romantic interaction';
+            }
+            
+            return {
+                rating: rating,
+                status: status,
+                color: color,
+                advice: advice,
+                bestHours: bestHours
+            };
+        }
+
+        function getHourEnergyDescription(tenGod, hourElement, quality, chartStrength, luckyElements) {
+            // Generate a one-sentence description for what this hour is good for
+            
+            if (quality === 'peak') {
+                // Peak energy hours
+                switch(tenGod) {
+                    case 'Produces Wealth':
+                        return 'Perfect hour for money matters, business calls, income-generating activities, and career advancement.';
+                    case 'Produces Output':
+                        return 'Ideal for creative work, content creation, projects, performances, and tangible output.';
+                    case 'Controls Officer':
+                        return 'Excellent for authority work, leadership decisions, power moves, negotiations, and public appearances.';
+                    case 'Same Self':
+                        return 'Stable and grounded hour - great for focused work, decisions, and personal power.';
+                    case 'Competes':
+                        return 'Competitive energy - best for sports, negotiations, asserting yourself, and winning situations.';
+                    case 'Controlled By Resource':
+                        return 'Supportive hour for learning, development, receiving help, and building skills.';
+                    case 'Controlled By Parent':
+                        return 'Nurturing hour - good for support, guidance, maternal/paternal activities, protection.';
+                    default:
+                        return `Peak energy in your ${hourElement} hour - excellent for important activities and major decisions.`;
+                }
+            } else if (quality === 'challenging') {
+                if (hourElement === 'Water' && chartStrength === 'Strong') {
+                    return 'Challenging hour - Water pressure on your Metal. Focus on quiet work, reflection, intuition. Avoid major commitments.';
+                }
+                return 'Use caution during this hour - requires careful decision-making and defensive positioning.';
+            } else {
+                // Neutral energy
+                switch(tenGod) {
+                    case 'Produces Wealth':
+                        return 'Good hour for financial tasks, business planning, earning opportunities, and resources.';
+                    case 'Produces Output':
+                        return 'Balanced hour for creative work, projects, finishing tasks, and bringing things into form.';
+                    case 'Controls Officer':
+                        return 'Suitable hour for professional matters, management, authority, and public interaction.';
+                    case 'Same Self':
+                        return 'Steady hour for focused work, personal development, self-care, and grounded activities.';
+                    case 'Competes':
+                        return 'Neutral competitive hour - fine for regular work and collaboration with others.';
+                    case 'Controlled By Resource':
+                        return 'Good hour for learning, support-seeking, advice-taking, and receiving information.';
+                    case 'Controlled By Parent':
+                        return 'Stable hour for routine matters, communication, administrative work, and planning.';
+                    default:
+                        return `Neutral energy hour - suitable for routine tasks, planning, and steady progress.`;
+                }
+            }
+        }
+
+        function parseChartElement(dayMasterStr) {
+            for (let data of Object.values(STEMS)) {
+                if (data.name === dayMasterStr) {
+                    return data;
+                }
+            }
+            return null;
+        }
+
+        function generateForecast(dateStr, dayStemBranch, chart) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // Local timezone, not UTC
+            const dayName = date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+            const daySBInfo = parseStemBranch(dayStemBranch);
+            if (!daySBInfo) return;
+
+            const dayMasterData = parseChartElement(chart.dayMaster);
+            
+            // Generate day summary
+            const daySummaryHTML = `
+                <div class="day-summary">
+                    <h3>📍 ${dayName}</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <strong>Day Stem-Branch</strong>
+                            ${dayStemBranch}<br>
+                            ${daySBInfo.stem.name}<br>
+                            ${daySBInfo.branch.name}
+                        </div>
+                        <div class="summary-item">
+                            <strong>Your Day Master</strong>
+                            ${chart.dayMaster}
+                        </div>
+                    </div>
+                </div>
+                <div class="day-analysis" id="dayAnalysis"></div>
+            `;
+            document.getElementById('daySummary').innerHTML = daySummaryHTML;
+            
+            // Add day analysis
+            generateDayAnalysis(daySBInfo, dayMasterData, chart);
+
+            // Generate hourly breakdown
+            const mainHours = generateMainHours(daySBInfo, chart, dayMasterData);
+            const extendedHours = generateExtendedHours(daySBInfo, chart, dayMasterData);
+
+            document.getElementById('hoursContainer').innerHTML = mainHours;
+            document.getElementById('extendedHoursContainer').innerHTML = extendedHours;
+        }
+
+        function generateDayAnalysis(daySBInfo, dayMasterData, chart) {
+            const dayElement = daySBInfo.stem.element;
+            const dayAnalysisDiv = document.getElementById('dayAnalysis');
+            
+            // First, add the detailed energy overview
+            const detailedOverview = getDetailedEnergyOverview(daySBInfo, chart);
+            
+            let summary = '';
+            let analysis = `<strong>🌟 Day Energy Analysis:</strong><br>`;
+            
+            if (chart.luckyElements.includes(dayElement)) {
+                summary = `✨ Excellent day - Your lucky ${dayElement} element is active. Perfect for major moves, important calls, performances, and creative breakthroughs.`;
+                analysis += `<strong style="color: #2e7d32;">${dayElement} Element Day</strong> - EXCELLENT energy! Your lucky element activates today.<br>`;
+                analysis += `<strong>Best for:</strong> Major decisions, career moves, important communications, performances`;
+            } else if (dayElement === 'Water' && chart.chartStrength === 'Strong') {
+                summary = `⚠️ Challenging day - Water pressures your Strong Metal chart. Use caution with major commitments; focus on reflection and learning instead.`;
+                analysis += `<strong style="color: #e65100;">${dayElement} Element Day</strong> - Challenging for your Strong Metal chart. Water can pressure Metal.<br>`;
+                analysis += `<strong>Caution with:</strong> Major financial commitments, risky decisions<br>`;
+                analysis += `<strong>Good for:</strong> Reflection, learning, subtle strategy work`;
+            } else {
+                summary = `◆ Balanced day - Neutral energy creates stability. Good for planning, routine work, collaboration, and building foundations.`;
+                analysis += `<strong style="color: #1565c0;">${dayElement} Element Day</strong> - Neutral energy. Steady and balanced.<br>`;
+                analysis += `<strong>Best for:</strong> Routine tasks, planning, collaboration`;
+            }
+            
+            analysis = `<div style="background: #fff9e6; border-left: 4px solid #fbc02d; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; line-height: 1.6;"><strong>Daily Summary:</strong> ${summary}</div>` + analysis;
+            
+            // Add practical guidance
+            const elementColors = getElementColors(dayElement);
+            const workEnv = getWorkEnvironmentRecommendation('', dayElement, chart.luckyElements);
+            const exercise = getIdealExerciseWindow(daySBInfo, chart);
+            const travel = getTravelGuidance(dayElement, daySBInfo, chart);
+            const romance = getRomanceMeter(daySBInfo, chart);
+            
+            analysis += `
+                ${detailedOverview}
+                
+                <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 15px 0;">
+                
+                <div style="margin-top: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                        <div style="background: #f8f9ff; padding: 12px; border-radius: 10px; border-left: 4px solid ${elementColors.hex};">
+                            <strong style="color: ${elementColors.hex}; display: block; margin-bottom: 5px;">👗 Wear</strong>
+                            <div style="font-size: 12px; color: #333; margin-bottom: 8px;">${elementColors.wear}</div>
+                            <strong style="color: #999; display: block; font-size: 11px; margin-bottom: 3px;">Avoid</strong>
+                            <div style="font-size: 12px; color: #666;">${elementColors.avoid}</div>
+                        </div>
+                        
+                        <div style="background: #f1f8f4; padding: 12px; border-radius: 10px; border-left: 4px solid #4caf50;">
+                            <strong style="color: #4caf50; display: block; margin-bottom: 5px;">🏋️ Exercise</strong>
+                            <div style="font-size: 12px; color: #333; margin-bottom: 8px;"><strong>${exercise.icon} ${exercise.window}</strong></div>
+                            <div style="font-size: 11px; color: #666;">${exercise.reason}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f0f7ff; padding: 12px; border-radius: 10px; border-left: 4px solid #2196F3; margin-bottom: 12px;">
+                        <strong style="color: #2196F3; display: block; margin-bottom: 5px;">🏢 Work Environment</strong>
+                        <div style="font-size: 12px; color: #333; margin-bottom: 8px;"><strong>${workEnv.icon} ${workEnv.ideal}</strong></div>
+                        <div style="font-size: 11px; color: #666;">${workEnv.reason}</div>
+                    </div>
+                    
+                    <div style="background: #fff3e0; padding: 12px; border-radius: 10px; border-left: 4px solid ${travel.color}; margin-bottom: 12px;">
+                        <strong style="color: ${travel.color}; display: block; margin-bottom: 5px;">${travel.status}</strong>
+                        <div style="font-size: 12px; color: #333;">${travel.advice}</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,105,180,0.08); padding: 12px; border-radius: 10px; border-left: 4px solid ${romance.color};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <strong style="color: ${romance.color}; display: block;">${romance.status}</strong>
+                            <div style="font-size: 14px; font-weight: 600; color: ${romance.color};">${romance.rating}/10</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <div style="background: #e0e0e0; border-radius: 4px; height: 6px; overflow: hidden;">
+                                <div style="background: ${romance.color}; height: 100%; width: ${romance.rating * 10}%; transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: #333; margin-bottom: 8px;"><strong>💕 Romance Energy:</strong> ${romance.advice}</div>
+                        <div style="font-size: 11px; color: #666;"><strong>✨ Best Hours:</strong> ${romance.bestHours}</div>
+                    </div>
+                </div>
+            `;
+            
+            dayAnalysisDiv.innerHTML = analysis;
+        }
+        
+        function getDetailedEnergyOverview(daySBInfo, chart) {
+            const dayElement = daySBInfo.stem.element;
+            const dayStemYin = daySBInfo.stem.yin;
+            
+            console.log('DEBUG: getDetailedEnergyOverview called');
+            console.log('Day element:', dayElement);
+            console.log('Lucky elements:', chart.luckyElements);
+            console.log('Chart strength:', chart.chartStrength);
+            
+            let overview = '';
+            
+            // Lucky Fire Days
+            if (dayElement === 'Fire' && chart.luckyElements.includes('Fire')) {
+                console.log('→ Showing FIRE overview');
+                overview = `
+                    <div style="background: linear-gradient(135deg, #ffebee 0%, #ffcccc 100%); padding: 16px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 16px; font-weight: 600; color: #c62828; margin-bottom: 10px;">
+                            🔥 EXCELLENT FIRE ELEMENT DAY - Your Lucky Element Active!
+                        </div>
+                        
+                        <div style="font-size: 13px; line-height: 1.8; color: #333;">
+                            <strong>Today's Energy:</strong><br>
+                            Fire is your lucky element and it's at full power today. This is one of your BEST days for:
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>🎯 Peak Opportunities:</strong><br>
+                                • Major business decisions & important calls<br>
+                                • Creative breakthroughs & performances<br>
+                                • Career advancement & leadership moves<br>
+                                • Public visibility & visible work<br>
+                                • Important negotiations & closing deals<br>
+                                • Starting new projects or ventures
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>⚡ Energy Characteristics:</strong><br>
+                                • Explosive, energetic, powerful<br>
+                                • Fast momentum & quick results<br>
+                                • Charismatic & confident<br>
+                                • Action-oriented & passionate<br>
+                                • Natural magnetism & appeal
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>💡 Peak Energy Window:</strong><br>
+                                🐍 Snake Hour (9-11am) & 🐴 Horse Hour (11am-1pm)<br>
+                                Schedule your most important activities during this window for maximum impact!
+                            </div>
+                            
+                            <strong style="color: #c62828;">✓ Bottom Line:</strong> This is an EXCELLENT day - leverage it for major moves, important meetings, and visible work. Your natural power and charisma are at maximum.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Lucky Wood Days
+            else if (dayElement === 'Wood' && chart.luckyElements.includes('Wood')) {
+                console.log('→ Showing WOOD overview');
+                overview = `
+                    <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 16px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 16px; font-weight: 600; color: #2e7d32; margin-bottom: 10px;">
+                            🌿 EXCELLENT WOOD ELEMENT DAY - Your Lucky Element Active!
+                        </div>
+                        
+                        <div style="font-size: 13px; line-height: 1.8; color: #333;">
+                            <strong>Today's Energy:</strong><br>
+                            Wood is your lucky element and it's at full power today. This is one of your BEST days for:
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>🎯 Peak Opportunities:</strong><br>
+                                • Growth & expansion initiatives<br>
+                                • Creative collaboration & teamwork<br>
+                                • Flexibility & adapting to change<br>
+                                • Starting new projects with longevity<br>
+                                • Relationship building & networking<br>
+                                • Yoga, flexibility, flowing work
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>⚡ Energy Characteristics:</strong><br>
+                                • Flexible, flowing, harmonious<br>
+                                • Growth-oriented & expansive<br>
+                                • Cooperative & collaborative<br>
+                                • Smooth transitions & natural progress<br>
+                                • Generous & nurturing
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>💡 Peak Energy Window:</strong><br>
+                                🐯 Tiger Hour (3-5am) & 🐰 Rabbit Hour (5-7am)<br>
+                                Morning yoga or flowing work is ideal. Early morning energy is your ally!
+                            </div>
+                            
+                            <strong style="color: #2e7d32;">✓ Bottom Line:</strong> This is an EXCELLENT day - excellent for growth, collaboration, and flowing projects. Your natural flexibility and generosity shine.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Challenging Water Days
+            else if (dayElement === 'Water' && chart.chartStrength === 'Strong') {
+                console.log('→ Showing WATER/CHALLENGING overview');
+                overview = `
+                    <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 16px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 16px; font-weight: 600; color: #1565c0; margin-bottom: 10px;">
+                            💧 CHALLENGING WATER DAY - Caution Advised for Strong Metal
+                        </div>
+                        
+                        <div style="font-size: 13px; line-height: 1.8; color: #333;">
+                            <strong>Today's Energy:</strong><br>
+                            Water challenges your Strong Metal chart. This is a day for careful, introspective, measured energy rather than action.
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>⚠️ What to Avoid:</strong><br>
+                                ✗ Major financial decisions or commitments<br>
+                                ✗ Risky business moves or bold plays<br>
+                                ✗ Aggressive negotiations or confrontations<br>
+                                ✗ Intense exercise or strenuous activities<br>
+                                ✗ Starting major new projects<br>
+                                ✗ High-stakes decisions
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>✓ What Works Well:</strong><br>
+                                • Research, learning, skill development<br>
+                                • Planning & strategy (not action)<br>
+                                • Deep reflection & introspection<br>
+                                • Meditation, journaling, solo work<br>
+                                • Detail-oriented admin tasks<br>
+                                • Listening & receiving information
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>⚡ Energy Characteristics:</strong><br>
+                                • Pressure & flowing constraints<br>
+                                • Introspective & contemplative<br>
+                                • Communicative & receptive<br>
+                                • Things may move slower than usual<br>
+                                • Greater need for rest & recovery
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>💡 Timing Caution:</strong><br>
+                                Avoid Water hours (11pm-3am). Instead use 🐉 Dragon Hour (7-9am) for light activity and rest/recovery at other times.
+                            </div>
+                            
+                            <strong style="color: #1565c0;">✓ Bottom Line:</strong> Use this day for wisdom, learning, and strategic planning rather than major action. Treat it as a recovery/preparation day. Patience is your friend.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Neutral Days
+            else {
+                console.log('→ Showing NEUTRAL overview');
+                overview = `
+                    <div style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 16px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 16px; font-weight: 600; color: #6a1b9a; margin-bottom: 10px;">
+                            ◆ BALANCED NEUTRAL DAY - Steady & Flexible Energy
+                        </div>
+                        
+                        <div style="font-size: 13px; line-height: 1.8; color: #333;">
+                            <strong>Today's Energy:</strong><br>
+                            ${dayElement} element provides stable, balanced energy. A good day for consistent progress on any front.
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>✓ What Works Well:</strong><br>
+                                • Regular work & routine tasks<br>
+                                • Collaborative meetings & teamwork<br>
+                                • Building foundations & planning<br>
+                                • Consistent, steady progress<br>
+                                • Flexibility - adapt as needed<br>
+                                • Both creative & administrative work
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>⚡ Energy Characteristics:</strong><br>
+                                • Stable & predictable<br>
+                                • Balanced & adaptable<br>
+                                • Steady momentum possible<br>
+                                • Good for routine execution<br>
+                                • Neither favored nor challenged
+                            </div>
+                            
+                            <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                                <strong>💡 Strategic Note:</strong><br>
+                                While this is a solid day for regular work, consider saving major initiatives for your lucky Fire/Wood element days when you have maximum support. Use neutral days for execution.
+                            </div>
+                            
+                            <strong style="color: #6a1b9a;">✓ Bottom Line:</strong> A dependable day for steady work and progress. Not special, but reliable. Good for maintaining momentum without major surprises.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            console.log('Returning overview with length:', overview.length);
+            return overview;
+        }
+
+        function generateMainHours(daySBInfo, chart, dayMasterData) {
+            const hourBranches = [3, 4, 5, 6, 7, 8, 9, 10, 11, 0]; // 5am-1am
+            return hourBranches.map(branchIndex => 
+                generateHourBlock(branchIndex, daySBInfo, chart, dayMasterData)
+            ).join('');
+        }
+
+        function generateExtendedHours(daySBInfo, chart, dayMasterData) {
+            const hourBranches = [1, 2]; // 1am-5am
+            return hourBranches.map(branchIndex => 
+                generateHourBlock(branchIndex, daySBInfo, chart, dayMasterData)
+            ).join('');
+        }
+
+        function generateHourBlock(branchIndex, daySBInfo, chart, dayMasterData) {
+            const branch = BRANCHES[branchIndex];
+            const hourStem = getHourStemBranch(branchIndex);
+            
+            const hourStemBranch = hourStem.stem.char + branch.char;
+            const hourElement = branch.element;
+            const tenGod = getTenGodRelationship(dayMasterData.element, hourElement);
+            
+            let quality = 'neutral';
+            let qualityClass = 'neutral';
+            let qualityText = '◆ Neutral energy';
+            
+            if (chart.luckyElements.includes(hourElement)) {
+                quality = 'peak';
+                qualityClass = 'peak';
+                qualityText = '★ PEAK ENERGY - Perfect for important tasks';
+            } else if (hourElement === 'Water' && chart.chartStrength === 'Strong') {
+                quality = 'challenging';
+                qualityClass = 'challenging';
+                qualityText = '⚠ Challenging - Use caution with major decisions';
+            }
+
+            const elementClass = `element-${hourElement.toLowerCase()}`;
+            const hourDescription = getHourEnergyDescription(tenGod, hourElement, quality, chart.chartStrength, chart.luckyElements);
+            
+            return `
+                <div class="hour-block ${qualityClass}">
+                    <div class="hour-time">${branch.animal} ${branch.name} (${branch.hour})</div>
+                    <div class="hour-stem-branch">
+                        Stem-Branch: <strong>${hourStemBranch}</strong> 
+                        <span class="element-tag ${elementClass}">${hourElement}</span>
+                    </div>
+                    <div class="hour-details">
+                        <div><span class="ten-god">→ ${tenGod}</span></div>
+                        <div class="quality-indicator quality-${qualityClass}">${qualityText}</div>
+                        <div style="margin-top: 8px; font-size: 12px; line-height: 1.5; color: #555; font-style: italic;">
+                            ${hourDescription}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleExtendedHours() {
+            document.getElementById('extendedHours').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
